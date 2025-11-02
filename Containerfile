@@ -5,7 +5,14 @@ RUN apt-get update -y
 RUN apt-get install -y \
     build-essential \
     ruby \
-    cmake
+    cmake \
+    wget
+
+RUN wget https://developer.arm.com/-/media/Files/downloads/gnu/13.3.rel1/binrel/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz
+
+RUN mkdir -p /bin/crossc/aarch64/
+RUN tar xJf arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz \
+    -C /bin/crossc/aarch64/
 
 #RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
 #    locale-gen

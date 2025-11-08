@@ -50,11 +50,22 @@ bool do_exec(int count, ...)
 
     va_end(args);
 
+    int wstatus;
     fflush(stdout);
-    fork();
-    int rv = execv(command[0], &command[1]);
+    pid_t kidpid = fork();
+    switch (kidpid) {
+        case 0:
+            execv(command[0], command);
+            break;
+        case -1:
+            return false;
+        default:
+            waitpid(-1, &wstatus, 0);
+            if(WEXITSTATUS(wstatus) != 0)
+                return false;
+    }
 
-    return !rv;
+    return true;
 }
 
 /**
@@ -79,25 +90,27 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
 
     va_end(args);
 
-    int kidpid;
-    int rv = 0;
     int output_fd = open(outputfile, O_WRONLY|O_TRUNC|O_CREAT, 0644);
-    if (output_fd < 0) {
-        perror("open");
-        abort();
-    }
+
+    int wstatus;
     fflush(stdout);
-    switch (kidpid = fork()) {
-    case -1: perror("fork"); abort();
-    case 0:
-        if (dup2(output_fd, 1) < 0) { perror("dup2"); abort(); }
-        close(output_fd);
-        rv = execv(command[0], &command[1]);
-        perror("execv");
-        abort();
-    default:
-        close(output_fd);
+    pid_t kidpid = fork();
+    switch (kidpid) {
+        case 0:
+            close(STDOUT_FILENO);
+            dup2(output_fd, STDOUT_FILENO);
+            execv(command[0], command);
+            break;
+        case -1:
+            return false;
+        default:
+            waitpid(-1, &wstatus, 0);
+            if(WEXITSTATUS(wstatus) != 0)
+                return false;
+
     }
 
-    return !rv;
+    close(output_fd);
+
+    return true;
 }

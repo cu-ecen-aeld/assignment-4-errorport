@@ -22,7 +22,7 @@ else
 fi
 
 mkdir -p ${OUTDIR}
-cp .config ${OUTDIR}
+cp ${FINDER_APP_DIR}/.config ${OUTDIR}
 
 cd "$OUTDIR"
 if [ ! -d "${OUTDIR}/linux-stable" ]; then

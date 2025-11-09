@@ -15,10 +15,10 @@ build:
 
 shell:
 	podman run -it --rm \
-	--userns=keep-id \
 	-w /proj \
 	-v ${PWD}:/proj:rw,Z \
 	-v /tmp:/tmp \
+	-v ${HOME}/.ssh:/root/.ssh \
 	--device=/dev/net/tun:/dev/net/tun \
 	${BUILD_IMG} \
 	/bin/bash

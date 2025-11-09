@@ -14,6 +14,20 @@ RUN mkdir -p /bin/crossc/aarch64/
 RUN tar xJf arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz \
     -C /bin/crossc/aarch64/
 
+ENV PATH=$PATH:/bin/crossc/aarch64/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu/bin/
+
+RUN apt-get install -y \
+    git \
+    libncurses-dev \
+    flex \
+    bison \
+    qemu-system-arm \
+    libssh-dev \
+    bc \
+    sudo \
+    cpio \
+    gzip
+
 #RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
 #    locale-gen
 #ENV LANG en_US.UTF-8

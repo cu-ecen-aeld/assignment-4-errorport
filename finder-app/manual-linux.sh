@@ -34,11 +34,10 @@ if [ ! -e ${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image ]; then
     cd linux-stable
     echo "Checking out version ${KERNEL_VERSION}"
     git checkout ${KERNEL_VERSION}
-    # TODO: Add your kernel build steps here
     make clean
     make ARCH=arm64 CROSS_COMPILE=aarch64-none-linux-gnu- mrproper
     make ARCH=arm64 CROSS_COMPILE=aarch64-none-linux-gnu- defconfig
-    cp  ../.config .
+    #cp  ../.config .
     time "" | make -j4 ARCH=arm64 CROSS_COMPILE=aarch64-none-linux-gnu- all && \
         make ARCH=arm64 CROSS_COMPILE=aarch64-none-linux-gnu- modules && \
         make ARCH=arm64 CROSS_COMPILE=aarch64-none-linux-gnu- dtbs
@@ -111,6 +110,7 @@ make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE}
 cp writer ${OUTDIR}/rootfs/home/
 
 cp ${PWD}/*.sh ${OUTDIR}/rootfs/home/
+mkdir -p ${OUTDIR}/rootfs/home/conf/
 cp ${PWD}/conf/username.txt ${OUTDIR}/rootfs/home/conf/username.txt
 cp ${PWD}/conf/assignment.txt ${OUTDIR}/rootfs/home/conf/assignment.txt
 

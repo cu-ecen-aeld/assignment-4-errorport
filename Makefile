@@ -16,6 +16,7 @@ build:
 shell:
 	podman run -it --rm \
 	--userns=keep-id \
+	--network=host \
 	-w /proj \
 	-v ${PWD}:/proj:rw,Z \
 	-v /tmp:/tmp \

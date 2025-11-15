@@ -28,6 +28,10 @@ RUN apt-get install -y \
     cpio \
     gzip
 
+RUN apt-get install -y \
+    file \
+    rsync
+
 #RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
 #    locale-gen
 #ENV LANG en_US.UTF-8
